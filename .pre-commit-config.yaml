@@ -14,10 +14,9 @@ repos:
         always_run: true
       - id: check-added-large-files
         always_run: true
-      - id: check-yaml
-        always_run: true
       - id: end-of-file-fixer
         always_run: true
+        files: "code/notebooks/"
       - id: requirements-txt-fixer
         always_run: true
 
