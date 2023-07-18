@@ -20,8 +20,8 @@ repos:
         always_run: true
       - id: requirements-txt-fixer
         always_run: true
-      
-  -   repo: https://github.com/ambv/black
+
+  - repo: https://github.com/ambv/black
     rev: 19.3b0
     hooks:
     -   id: black
