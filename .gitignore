@@ -1,5 +1,8 @@
-# virtual environment 
+# virtual environment
 nocluV/
 
 # vscode files
 .vscode/
+
+# proj. documentation
+diary.md
