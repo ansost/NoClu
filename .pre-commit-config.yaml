@@ -1,0 +1,27 @@
+repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
+    hooks:
+      - id: nbstripout
+        files: "code/notebooks/"
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-ast
+        always_run: true
+      - id: trailing-whitespace
+        always_run: true
+      - id: check-added-large-files
+        always_run: true
+      - id: check-yaml
+        always_run: true
+      - id: end-of-file-fixer
+        always_run: true
+      - id: requirements-txt-fixer
+        always_run: true
+      
+  -   repo: https://github.com/ambv/black
+    rev: 19.3b0
+    hooks:
+    -   id: black
