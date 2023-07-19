@@ -1,3 +1,21 @@
+# Lexicon for core concepts of the project
+
+- [Lexicon for core concepts of the project](#lexicon-for-core-concepts-of-the-project)
+  - [Dimensionality reduction Techniques](#dimensionality-reduction-techniques)
+    - [Principal Component Analysis (PCA)](#principal-component-analysis-pca)
+    - [t-distributed stochastic neighbor embedding (TSNE)](#t-distributed-stochastic-neighbor-embedding-tsne)
+    - [Comparing t-sne and PCA](#comparing-t-sne-and-pca)
+  - [Clustering algorithms](#clustering-algorithms)
+    - [DBSCAN](#dbscan)
+    - [Ward's Method](#wards-method)
+    - [BICO algorithm](#bico-algorithm)
+    - [k-means](#k-means)
+  - [misceläneus](#misceläneus)
+    - [Word Embeddings](#word-embeddings)
+    - [Correlation Matrix](#correlation-matrix)
+- [Questions](#questions)
+
+
 ## Dimensionality reduction Techniques
 > The process of reducing the number of features (or dimensions) in a dataset while retaining as much information as possible
 
