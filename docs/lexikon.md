@@ -5,6 +5,8 @@
     - [Principal Component Analysis (PCA)](#principal-component-analysis-pca)
     - [t-distributed stochastic neighbor embedding (TSNE)](#t-distributed-stochastic-neighbor-embedding-tsne)
     - [Comparing t-sne and PCA](#comparing-t-sne-and-pca)
+  - [Graph Theory basics for the MCF problem](#graph-theory-basics-for-the-mcf-problem)
+    - [Minimun Cost Flow Problem](#minimun-cost-flow-problem)
   - [Clustering algorithms](#clustering-algorithms)
     - [DBSCAN](#dbscan)
     - [Ward's Method](#wards-method)
@@ -59,7 +61,7 @@ Reduction can be achieved using *feature selection* or *feature extraction*:
        - measure of dispersion defined as data spread from the provided dataset's mean
 2. Compute the eigenvectors of this matrix.
     - *Eigenvectors*:
-      - give the characteristics of a vetor or a matrix
+      - give the characteristics of a vector or a matrix
       - as far as I understood, eigenvectors are vectors that point in the same direction as the vectors before after scalar transformation
       - `special vectors that maintain their direction despite bullying by the matrices`
 3. Eigenvectors corresponding to the largest eigenvalues are used to reconstruct a large fraction of variance of the original data
@@ -139,6 +141,42 @@ T-sne paper:
 | 12.   	| It can be used for feature extraction                                                 	| It is mainly used for visualization and exploratory data analysis.                                                   	|
 | 13.   	| PCA can be sensitive to the ordering of the data points                               	| t-SNE is less sensitive to the ordering of the data points.                                                          	|
 
+## Graph Theory basics for the MCF problem
+> Studying the relationships between different nodes (vertices) and connections (edges) between them
+- a graph is a data structure defined by nodes (vertices) and edges
+  - *edge*
+    - a connection between two nodes, can be expressed as an ordered pair, may have a weight or is otherwise set to 1
+  - *node*
+    - unit of graphs, typically displayed as a circle, number or letter
+    - *indegree* (of a node)
+      - number of arriving edges to a node
+    - *outdegree* (of a node)
+      - number of departing edges to a node
+- *Flow networks*
+    - a directed graph where each edge has a capacity and each edge receives a flow
+      - *directed graph*
+        - a graph where edges have a direction
+    - *flow*
+      - 'A flow in a network is a specification of how to route “stuff” from s to t so that no link is used beyond its capacity, and so that every link, except the sender s and the receiver t, relays out “stuff” at exactly the same rate at which it receives from other vertices'
+      - this is expressed in the conditions for a valid flow:
+        - *flow capacity constraint*
+          - the flow on an edge cannot exceed the capacity of the edge
+            - *capacity*:
+              - the maximum amount of flow that an edge can support
+        - *flow conservation condition*
+          - the flows into a vertex must equal the flows out of that vertex, except for the source and sink vertices
+            - *source vertex*:
+              - the vertex where the flow originates
+            - *sink vertex*:
+              - the vertex where the flow terminates
+
+### Minimun Cost Flow Problem
+- a special case of the network flow problem in which the cost of a flow is minimized
+  - *Network Flow Problem*:
+    - the problem of construcing a flow for a given network that satisfies the contraints of a flow (capacity constraint, conservation condition)
+  - *cost of a flow*
+    - each edge has a cost (or weight), what the cost stands for depends on the application of the graph (lenght, energy required, ...)
+- Watch (the beginning) of [this video](https://www.youtube.com/watch?v=oHy3ddI9X3o&t=81s) for an intro on how to think about different approaches to the problem of finding a flow for a flow network
 
 ## Clustering algorithms
 
@@ -184,7 +222,8 @@ To look up:
 
 # Questions
 - Why PCA and tsne instead of SVD or LDA?
-- What does the writ-up (Projektbericht) look like?
+- What does the write-up (Projektbericht) look like?
+- What is the motivation behind the problem?
 
 Sources:
 - https://www.geeksforgeeks.org/dimensionality-reduction/
@@ -195,3 +234,6 @@ Sources:
 - https://distill.pub/2016/misread-tsne/
 - https://towardsdatascience.com/t-sne-clearly-explained-d84c537f53a
 - https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html#:~:text=The%20learning%20rate%20for%20t,dense%20cloud%20with%20few%20outliers.
+- https://www.geeksforgeeks.org/mathematics-graph-theory-basics-set-1/
+- http://theory.stanford.edu/~trevisan/cs261/lecture09.pdf
+- https://brilliant.org/wiki/flow-network/#:~:text=A%20Flow%20network%20is%20a,of%20routes%20with%20limited%20capacity.
