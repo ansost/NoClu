@@ -2,7 +2,18 @@
 
 by [**Anna Stein**](https://ansost.github.io)
 
-PROJECT DESCRIPTION HERE, MAIN RESULTS HERE
+Evaluating clusters formed by dimensionality reduction algorithms (PCA, t-SNE) on the output of clustering algorithms (k-means, ...) by using a min cost flow approach.
+
+Approximate workflow:
+1. Remove synchretic word embeddings from the data
+  -  I dont get the coding of the synchretic matrix a 100% but I can hopefully just use your function
+2. Implement min cost flow
+  - I will probably use the library NetworkX using their function for that since Lemon is only available in c++ and I could not find a port to
+    Python
+3. Use a clustering algorithm (k-means, DBSCAN, Ward's Method, BICO algorithm) on the non-synchretic word embeddings
+4. Use PCA (optionally with tsne) with some n_dimensions
+5. Input true labels from embeddings and (reduced) clusters from clustering algorithm as input for the min cost flow implementation
+6. Repeat for different clustering algorithms and n_dimensions for PCA & tsne
 
 ## Software implementation
 
