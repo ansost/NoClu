@@ -9,3 +9,9 @@ diary.md
 
 # python/jupyter files
 code/notebooks/.ipynb_checkpoints/
+
+# ignore large data files
+data/cc.ru.300.bin
+data/cc.ru.300.bin.gz
+data/final-model.bin
+data/form_in_dict.csv
