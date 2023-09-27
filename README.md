@@ -4,21 +4,48 @@ by [**Anna Stein**](https://ansost.github.io)
 
 Evaluating clusters formed by dimensionality reduction algorithms (PCA, t-SNE) on the output of clustering algorithms (k-means, ...) by using a min cost flow approach.
 
-Approximate workflow:
-1. Remove synchretic word embeddings from the data
-  -  I dont get the coding of the synchretic matrix a 100% but I can hopefully just use your function
-2. Implement min cost flow
-  - I will probably use the library NetworkX using their function for that since Lemon is only available in c++ and I could not find a port to
-    Python
-3. Use a clustering algorithm (k-means, DBSCAN, Ward's Method, BICO algorithm) on the non-synchretic word embeddings
-4. Use PCA (optionally with tsne) with some n_dimensions
-5. Input true labels from embeddings and (reduced) clusters from clustering algorithm as input for the min cost flow implementation
-6. Repeat for different clustering algorithms and n_dimensions for PCA & tsne
-
 ## Software implementation
 
 All source code used to generate the results and figures in this paper are in the `code/` folder.
 The calculations and figure generation are run in both [Jupyter notebooks](http://jupyter.org/) and [Python](https://www.python.org/) scripts.
+```bash
+.
+├── LICENSE
+├── README.md
+├── REQUIREMENTS.txt
+├── code 
+│   ├── clustering.py
+│   ├── evaluation.py
+│   ├── noclu.py
+│   ├── preprocessing
+│   │   ├── gold_labels.py
+│   │   ├── oldpreprocess.py
+│   │   └── pca_tsne.py
+│   └── run_noclu.sh
+├── data
+│   ├── case2label.json
+│   ├── clustering_output
+│   ├── dim_reduced_input
+│   │   ├── nonsynchr_pca_200.npy
+│   │   ├── nonsynchr_pca_300.npy
+│   │   ├── nonsynchr_pca_80.npy
+│   │   ├── nonsynchr_pcatsne_200_2.npy
+│   │   ├── nonsynchr_pcatsne_200_3.npy
+│   │   ├── nonsynchr_pcatsne_300_2.npy
+│   │   ├── nonsynchr_pcatsne_300_3.npy
+│   │   ├── nonsynchr_pcatsne_80_2.npy
+│   │   └── nonsynchr_pcatsne_80_3.npy
+│   ├── gold_forms_2d.pkl
+│   ├── gold_labels_2d.pkl
+│   ├── index2case.json
+│   ├── list_of_noun_forms_full.csv
+│   ├── matrix_of_syncr.csv
+│   ├── nonsynchr_casevectors.npy
+│   ├── result.csv
+├── figures
+│   └── PCA_variance.png
+.
+```
 
 ### Data
 
@@ -39,10 +66,6 @@ pip install -r requirements.txt
 ```
 
 ## Reproducing the results
-
-DESCRIPTION HERE
-
-## Workflow
 
 DESCRIPTION HERE
 
