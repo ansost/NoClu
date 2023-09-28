@@ -1,0 +1,16 @@
+{
+    "sing_nomn": 0,
+    "sing_gent": 1,
+    "sing_datv": 2,
+    "sing_accs": 3,
+    "sing_ablt": 4,
+    "sing_loct": 5,
+    "sing_gen2": 6,
+    "plur_nomn": 7,
+    "plur_gent": 8,
+    "plur_datv": 9,
+    "plur_accs": 10,
+    "plur_ablt": 11,
+    "plur_loct": 12,
+    "plur_gen2": 13
+}
