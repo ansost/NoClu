@@ -48,8 +48,8 @@ The calculations and figure generation are run in both [Jupyter notebooks](http:
 ```
 
 ### Data
-
-DESCRIPTION OF DATA HERE
+This project is based on a trained fasttext model on Russian nouns. 
+The data for this project may be available upon request from the author.
 
 ## Getting the code
 
@@ -65,9 +65,33 @@ In the root folder of the repository, install the Python requirements using [pip
 pip install -r requirements.txt
 ```
 
-## Reproducing the results
+## Runnign the Code
+If you are unsure how to use a certain script of module, you can look at the docstring of the script.
+In the command line:
+```sh
+python3 -c "import <module>; help(<module>)"
+```
+or in Python:
+```python
+import <module>
+help(<module>)
+```
 
-DESCRIPTION HERE
+### Intended workflow
+Generally, the following is the intended workflow for the modules in this repository:
+1. Use PCA and t-SNE to reduce the dimensions of the vectors using `pca_tsne.py`. The parameters for the `pca_tsne` script are set inside of the script with a variable called `conditions`. Information on parameter formating can be found in the docstring of the script. 
+```sh
+python3 pca_tsne.py
+```
+
+2. Cluster and evaluate the resulting data using `noclu.py`. All parameters, e.g. which clustering algorithm to use, are set in the `run_noclu.sh` script which is also used to execute the code. 
+```sh
+sh run_noclu.sh
+```
+
+### Reproducing the results
+To reproduce the results of this paper, run the following scripts in the given order:
+
 
 ## License
 
