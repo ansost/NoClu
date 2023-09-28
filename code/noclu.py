@@ -7,16 +7,15 @@
 		input   path to input data - str
 		combinations   List of clustering algorithms and number of clusters/epsilon. Valid algos are 'kmeans', 'dbscan', 'ward'. Example: ['kmeans_2', 'dbscan_0.5', 'ward_2'] - list
         saveto  directory to save output to - str
-        gold_labels path to true labels of the input - str
 """
 import time
-import pickle
+from numpy.typing import ArrayLike
 import numpy as np
 import pandas as pd
 from docopt import docopt
-from typing import Tuple
+from typing import Tuple, Dict
 from tqdm import tqdm
-from evaluation import evaluate_clusters
+from evaluation import mincostflow, translate_labels
 from clustering import *
 
 
@@ -38,44 +37,60 @@ def get_params(combination: str) -> Tuple[str, str]:
     return algorithm, n_clusters
 
 
+def new_row(
+    input: ArrayLike, algorithm: str, n_clusters: int, gold_label_path: str, saveto: str
+) -> Dict[str, str]:
+    new_row = {
+        "input": input,
+        "algorithm": algorithm,
+        "n_clusters": n_clusters,
+        "gold_labels": gold_label_path,
+        "output": saveto,
+        "date": pd.to_datetime("today").strftime("%Y-%m-%d-%H-%M-%S"),
+    }
+    return new_row
+
+
 if __name__ == "__main__":
     args = docopt(__doc__)
     input = args["<input>"]
     combinations = args["<combinations>"]
     saveto = args["<saveto>"]
-
     start_time = time.time()
-
     algo_dict = {"kmeans": kmeans, "dbscan": dbscan, "ward": wards}
 
     word_embeddings = np.load(input)
-
-    df = pd.read_csv("../data/tests/test_results.csv")
-
-    gold_label_path = "../data/nonsynchr_labels_1dnumbers.npy"
+    df = pd.read_csv("../data/result.csv")
+    gold_label_path = "../data/gold_labels_1d.npy"
     gold_labels = np.load(gold_label_path)
-    # with open("../data/nonsynchr_labels.pkl", "rb") as f:
-    #    gold_labels = pickle.load(f)
 
     combinations = combinations.split()
     for combination in tqdm(combinations):
         algorithm, n_clusters = get_params(combination)
+
         print(f"Running {algorithm} with {n_clusters} clusters.")
-
         if valid_algorithm(algorithm):
+            # Cluster.
             labels = algo_dict[algorithm](word_embeddings, n_clusters)
-            evaluate_clusters(true_labels=gold_labels, estimated_labels=labels)
-            # np.save(saveto + combination + ".npy", labels)
+            filename = f"{saveto}{combination}{input.split('/')[-1]}"
+            np.save(filename, labels)
 
+            # Compute min cost flow.
+            translated_labels = translate_labels(labels, gold_labels)
+            cost, flowDict = mincostflow(predicted_labels=translated_labels)
+
+            # Save results in logs.
             new_row = {
-                "input": input,
                 "algorithm": algorithm,
                 "n_clusters": n_clusters,
-                "gold_labels": gold_label_path,
-                "output": saveto,
-                "date": pd.to_datetime("today").strftime("%Y-%m-%d-%H-%M-%S"),
+                "cost": cost,
+                "flowDict": flowDict,
+                "gold_label_path": gold_label_path,
+                "input": input,
+                "saveto": saveto,
+                "date": pd.to_datetime("today"),
             }
-            df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-    df.to_csv("../data/tests/test_results.csv", index=False)
+            df.loc[len(df.index)] = new_row
 
+    df.to_csv("../data/result.csv", index=False)
     print(f"Finished in {time.time() - start_time} seconds.")
