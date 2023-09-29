@@ -80,17 +80,19 @@ if __name__ == "__main__":
             cost, flowDict = mincostflow(predicted_labels=translated_labels)
 
             # Save results in logs.
+            input_file = input.split("/")[-1]
             new_row = {
                 "algorithm": algorithm,
                 "n_clusters": n_clusters,
                 "cost": cost,
                 "flowDict": flowDict,
                 "gold_label_path": gold_label_path,
-                "input": input,
+                "input": input_file,
                 "saveto": saveto,
                 "date": pd.to_datetime("today"),
             }
             df.loc[len(df.index)] = new_row
 
     df.to_csv("../data/result.csv", index=False)
+    print(df[["algorithm", "n_clusters", "cost", "input"]].tail(10))
     print(f"Finished in {time.time() - start_time} seconds.")
