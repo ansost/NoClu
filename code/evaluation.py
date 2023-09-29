@@ -4,7 +4,6 @@ from time import time
 from sklearn import metrics
 from numpy.typing import ArrayLike
 from typing import List, Dict
-from sklearn import metrics
 import string
 from collections import Counter, defaultdict
 import networkx as nx
@@ -98,14 +97,14 @@ def mincostflow(predicted_labels: ArrayLike) -> Dict:
         Dictionary of dictionaries keyed by nodes such that flowDict[u][v] is the flow edge (u, v).
     """
 
-    B = nx.DiGraph()
-
-    # Initialize all gold labels as nodes represented by numbers. Predicted clusters are letters.
-    # Bipartite = 0 is the gold labels and bipartite = 1 is the predicted labels.
-    B.add_nodes_from(list(range(0, 14)), bipartite=0)
     predictionclusters_as_nodes = [
         string.ascii_lowercase[i] for i in range(len(predicted_labels.keys()))
     ]
+
+    # Initialize all gold labels as nodes represented by numbers. Predicted clusters are letters.
+    # Bipartite = 0 is the gold labels and bipartite = 1 is the predicted labels.
+    B = nx.DiGraph()
+    B.add_nodes_from(list(range(0, 14)), bipartite=0)
     B.add_nodes_from(predictionclusters_as_nodes, bipartite=1)
 
     # Compute overlap between each of the gold clusters.
@@ -114,20 +113,20 @@ def mincostflow(predicted_labels: ArrayLike) -> Dict:
             cost = overlap(predicted_labels[cluster], label)
             if cost:
                 B.add_edge(
-                    predictionclusters_as_nodes[index], label, weight=cost, capacity=1
+                    label, predictionclusters_as_nodes[index], weight=cost, capacity=1
                 )  # TODO: Stimmt capacity=1 here?
 
     B.add_node("super_source")
-    # to_add = [("super_source", node) for node in predictionclusters_as_nodes]
-    for node in predictionclusters_as_nodes:
-        B.add_edge("super_source", node, weight=3, capacity=1)
-
     for node in range(0, 14):
+        B.add_edge("super_source", node)
+
+    B.add_node("super_sink")
+    for node in predictionclusters_as_nodes:
         B.add_edge(
-            "super_sink", node, weight=0
+            node, "super_sink", capacity=1
         )  # If capacity is not set, it is assumed to be infinite.
 
     # Compute min cost flow.
-    flowDict = nx.min_cost_flow(B)
+    flowDict = nx.max_flow_min_cost(B, s="super_source", t="super_sink")
     cost = nx.cost_of_flow(B, flowDict)
     return cost, flowDict
