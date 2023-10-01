@@ -1,4 +1,6 @@
-"""Run and evaluate clustering algorithms.
+"""
+Run and evaluate clustering algorithms.
+
 Input for the script is a config file, which contains the following parameters:
 - input: path to input file (word embeddings)
 - gold_labels: path to gold labels
@@ -16,7 +18,7 @@ import json
 from typing import Tuple, Dict
 from tqdm import tqdm
 from evaluation import mincostflow, translate_labels
-from clustering import kmeans, dbscan, wards
+from clustering import kmeans, dbscan
 
 
 def valid_algorithm(algorithm: str) -> bool:
