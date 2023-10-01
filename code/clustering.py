@@ -1,4 +1,10 @@
-"""Functions for using different clustering algorithms."""
+"""
+Functions for using different clustering algorithms.
+
+Exports the functions:
+    kmeans - k-means clustering
+    dbscan - DBSCAN clustering
+"""
 from numpy.typing import ArrayLike
 from typing import List
 from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
@@ -42,26 +48,3 @@ def dbscan(vectors: ArrayLike, epsilon: float) -> List[ArrayLike]:
     db = DBSCAN(eps=epsilon).fit(vectors)
     labels = db.labels_
     return labels
-
-
-def wards(vectors: ArrayLike, n_clusters: int) -> List[ArrayLike]:
-    """Cluster vectors using Ward's method.
-
-    Parameters
-    ----------
-    vectors:
-        Vectors to cluster.
-    n_clusters:
-        Number of clusters to create.
-
-    Returns
-    -------
-    labels:
-        Cluster labels of each point.
-    """
-    ward = AgglomerativeClustering(n_clusters=n_clusters, linkage="ward").fit(vectors)
-    labels = ward.labels_
-    return labels
-
-
-# TODO: Add BICO (from github repo?, is there another source?)
