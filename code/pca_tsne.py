@@ -1,6 +1,9 @@
 """
 Reduce dimensions for word embeddings using PCA and t-SNE.
 
+Usage:
+    python3 pca_tsne.py
+
 Input for the script is a config file, which contains the following parameters:
 - conditions:
     specifies the reduction algorithm (PCA or PCA + t-SNE) and the number of
