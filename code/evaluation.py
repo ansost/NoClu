@@ -7,7 +7,6 @@ Exports the functions:
     - overlap(): compute overlap between a predicted cluster and a label form the gold labels.
     - mincostflow(): compute a min cost flow between the predicted and the true labels.
 """
-
 from time import time
 from sklearn import metrics
 from numpy.typing import ArrayLike
@@ -20,7 +19,7 @@ from networkx.algorithms import bipartite
 
 
 def translate_labels(
-    labels: ArrayLike, gold_labels=ArrayLike, from_dbscan: bool = None
+    labels: ArrayLike, gold_labels: ArrayLike, from_dbscan: bool = None
 ) -> Dict[str, List[int]]:
     """Translate predicted labels back to original labels.
     For each input word, add it to a dictionary with clusters as keys and the original labels as values.
@@ -76,9 +75,11 @@ def overlap(cluster: List[int], label: int) -> int:
 
 def mincostflow(predicted_labels: ArrayLike) -> Dict:
     """Compute a minimum cost maximum flow between the predicted and the true labels.
-    Creates a directed graph (Digraph) with edges between predicted and true labels. a super source and sink
-    between which to compute the flow. The cost of each edge is the negative overlap between the predicted
-    and the true label. The capacity of each edge is 1 or infinite if not set.
+    Creates a directed graph (Digraph) with edges between predicted and true labels.
+    The cost of each edge is the negative overlap between the predicted and the true label.
+    The capacity of each edge is 1 or infinite if not set. IN addition there is a supoer source
+    connected to all gold labels and a super sink connected to all predicted labels. A min cost max flow is
+    computed between the super source and the super sink.
 
     Predicted clusters are represented by numbers and gold labels are represented by numbers preceeded by a 'c'.
     For the graph, bipartite = 0 is the gold labels and bipartite = 1 is the predicted labels.
