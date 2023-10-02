@@ -9,18 +9,18 @@ Throughout the script the following terminology is used:
 - case = grammatical description of the noun realization (e.g. singular nominative).
 - form = noun realization (e.g. "дом").
 
-'list_of_noun_forms_full.csv' 
+'list_of_noun_forms_full.csv'
 is a list of all noun forms in the fasttext model that contains the columns
 lemma, unkown number, grammatical gender, animacy, and 14 columns for each case (see further below for list of cases).
 Example: человек,2723.0,masc,anim,человек,человека,человеку,человека,человеком,человеке,человека,люди,людей,людям,людей,людьми,людях,людей
 The first four colums are filtered out to leave only the columns with the cases (variable: 'list_forms').
 The variable 'list_forms' has a shape of (11515, 14).
 
-'../data/matrix_of_syncr.csv' 
-is a matrix with binary coding that describes which forms are syncretic out of the 14 forms for each noun. 
+'../data/matrix_of_syncr.csv'
+is a matrix with binary coding that describes which forms are syncretic out of the 14 forms for each noun.
 Each form corresponds to a power of 2 from 2^0 to 2^13. When a form is synchretic, they share the same power of 2.
 
-The script filters out the forms in 'list_forms' that are synchretic using 'matrix_of_syncr'. 
+The script filters out the forms in 'list_forms' that are synchretic using 'matrix_of_syncr'.
 As a by-product, the gold labels are saved as numbers ('gold_labels') and the gold forms are saved as strings ('gold_forms').
 This is done using two dicitonaries that map the cases to numbers and vice versa: 'case2label' and 'index2case'.
 The two gold lists are saved as:

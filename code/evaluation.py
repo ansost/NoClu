@@ -2,10 +2,10 @@
 Evaluate clustering algorithms using a maximum flow minimum cost algorithm.
 
 Exports the functions:
-- evaluate_clustering(): evaluate clustering algorithms using a range of common metrics.
-- translate_labels(): translate predicted labels back to original labels.
-- overlap(): compute overlap between a predicted cluster and a label form the gold labels.
-- mincostflow(): compute a min cost flow between the predicted and the true labels.
+    - evaluate_clustering(): evaluate clustering algorithms using a range of common metrics.
+    - translate_labels(): translate predicted labels back to original labels.
+    - overlap(): compute overlap between a predicted cluster and a label form the gold labels.
+    - mincostflow(): compute a min cost flow between the predicted and the true labels.
 """
 
 from time import time

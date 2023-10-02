@@ -1,12 +1,17 @@
-"""Reduce dimensions for word embeddings using PCA and t-SNE.
-The 'conditions' variable specifies the reduction algorithm
-(PCA or PCA + t-SNE) and the number of dimensions/components.
-The filename also indicates the algorithm and the number of
-dimensions/components used.
+"""
+Reduce dimensions for word embeddings using PCA and t-SNE.
 
-Example:
-'pca_300' - PCA with 300 components
-'pcatsne_300_2' - PCA with 300 components followed by t-SNE with 2 dimensions
+Input for the script is a config file, which contains the following parameters:
+- conditions:
+    specifies the reduction algorithm (PCA or PCA + t-SNE) and the number of
+    dimensions/components. The filename also indicates the algorithm and the number of
+    dimensions/components used.
+- input:
+    path to input file (word embeddings)
+For more information on the input see the configuration file ('data/config_files/pca_tsne.config').
+
+This script saved the lower dimensions vectors as .npy files in the folder '/data/dim_reduced_input' with the
+combination as filename.
 """
 from typing import Tuple
 import yaml
