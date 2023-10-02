@@ -1,13 +1,18 @@
 """
 Run and evaluate clustering algorithms.
 
+Usage:
+    python3 noclu.py
+
 Input for the script is a config file, which contains the following parameters:
-- input: path to input file (word embeddings)
-- gold_labels: path to gold labels
-- combinations: list of combinations of clustering algorithms and number of clusters
-- saveto: path to save output files
+    - input: path to input file (word embeddings)
+    - gold_labels: path to gold labels
+    - combinations: list of combinations of clustering algorithms and number of clusters
+    - saveto: path to save output files
 
 More information on the parameters can be found in the config file ('/data/config_files/noclu.config').
+
+Raises exception if input file is not a .npy file.
 """
 import time
 from numpy.typing import ArrayLike
@@ -23,16 +28,16 @@ from clustering import kmeans, dbscan
 
 def valid_algorithm(algorithm: str) -> bool:
     """Check whether clustering algorithm is implemented.
-    Current valid algorithms are 'kmeans', 'dbscan' and 'ward'.
+    Current valid algorithms are 'kmeans' and 'dbscan'.
     """
-    if str(algorithm) not in ["kmeans", "dbscan", "ward"]:
-        print(f"Invalid algorithm: {algorithm}. Must be 'kmeans', 'dbscan' or 'ward'.")
+    if str(algorithm) not in ["kmeans", "dbscan"]:
+        print(f"Invalid algorithm: {algorithm}. Must be 'kmeans' or 'dbscan'.")
         return False
     return True
 
 
 def get_params(combination: str) -> Tuple[str, str]:
-    """Get parameter combinations from string."""
+    """Get parameter combinations from config string."""
     params = combination.split("_")
     algorithm = params[0]
     if algorithm == "dbscan":
@@ -45,6 +50,26 @@ def get_params(combination: str) -> Tuple[str, str]:
 def new_row(
     input: ArrayLike, algorithm: str, n_clusters: int, gold_label_path: str, saveto: str
 ) -> Dict[str, str]:
+    """Create new row for result.csv.
+
+    Parameters:
+    -----------
+    input:
+        Path to input file from current iteration.
+    algorithm:
+        Clustering algorithm.
+    n_clusters:
+        Number of clusters.
+    gold_label_path:
+        Path to gold labels.
+    saveto:
+        Path to save output files.
+
+    Returns:
+    --------
+    new_row:
+        Dictionary of parameters.
+    """
     new_row = {
         "input": input,
         "algorithm": algorithm,
@@ -72,7 +97,7 @@ if __name__ == "__main__":
     gold_labels = np.load(gold_label_path)
 
     df = pd.read_csv("../data/result.csv")
-    algo_dict = {"kmeans": kmeans, "dbscan": dbscan, "ward": wards}
+    algo_dict = {"kmeans": kmeans, "dbscan": dbscan}
 
     for combination in tqdm(combinations):
         algorithm, n_clusters = get_params(combination)
