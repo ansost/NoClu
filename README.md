@@ -2,7 +2,22 @@
 
 by [**Anna Stein**](https://ansost.github.io)
 
-TODO: Add description and slides link.
+<details>
+<summary>See repository structure</summary>
+
+```bash
+.
+├── LICENSE
+├── README.md
+├── REQUIREMENTS.txt
+├── src
+├── scripts
+├── data
+├── figures
+.
+```
+
+</details>
 
 ## Getting the code
 
@@ -28,12 +43,13 @@ pip install -r requirements.txt
 
 ## Software implementation
 
-All source code used to generate the results and figures in this paper are in the `code/` folder.
-The calculations and figure generation are run in both [Jupyter notebooks](http://jupyter.org/) and [Python](https://www.python.org/) scripts.
+All source code used to generate the results and figures in this paper are in the `src/` and `scripts` folder.
+The calculations and figure generation are run in [Python](https://www.python.org/) scripts.
 
 ### Data
 
-TODO: Add data description.
+The main data source is a pre-trained fasttext model with word embeddings for Russian noun cases.
+More information on the data that was used can be found in the preprocessing script (`scripts/preprocessing.py`).
 
 #### Preprocessing
 
@@ -46,7 +62,7 @@ python3 preprocessing.py
 #### Dimensionality Reduction
 
 Use just PCA or PCA followed by t-SNE to reduce the dimensions of the vectors. See the docstring of the script and the top of the config file (`data/config_files/npclu.py`) for more information on the input parameters.
-> Note that all computations involving t-SNE take a long time to run (1h+).
+> Note that all computations involving t-SNE may take a time to run (1h+).
 
 ```sh
 python3 pca_tsne.py
@@ -54,8 +70,7 @@ python3 pca_tsne.py
 
 #### Clustering and Evaluation
 
-Cluster the low-dimensional data using `kmeans`, `DBSCAN` or `Ward's` (agglomerative clustering). Evalaute the results using a maximum flow minimum cost algorithm implemented in `networkx`.
-> Note that since the sklearn implementation of [Ward's clustering needs O(n²) memory](https://stackoverflow.com/questions/55316093/memory-error-while-doing-hierarchical-clustering) and you most likely need to use a HPC system to run the computation.
+Cluster the low-dimensional data using `kmeans` and `DBSCAN`. Evaluate the results using a maximum flow minimum cost algorithm implemented in `networkx`.
 
 ```sh
 python3 noclu.py
@@ -63,53 +78,10 @@ python3 noclu.py
 
 Results are saved in `data/clustering_output/` and `data/result.csv`. An overview is printed in the command line.
 
-```bash
-.
-├── LICENSE
-├── README.md
-├── REQUIREMENTS.txt
-├── code
-│   ├── clustering.py
-│   ├── evaluation.py
-│   ├── noclu.py
-│   ├── preprocessing
-│   │   ├── gold_labels.py
-│   │   ├── oldpreprocess.py
-│   │   └── pca_tsne.py
-│   └── run_noclu.sh
-├── data
-│   ├── case2label.json
-│   ├── clustering_output
-│   ├── dim_reduced_input
-│   │   ├── nonsynchr_pca_200.npy
-│   │   ├── nonsynchr_pca_300.npy
-│   │   ├── nonsynchr_pca_80.npy
-│   │   ├── nonsynchr_pcatsne_200_2.npy
-│   │   ├── nonsynchr_pcatsne_200_3.npy
-│   │   ├── nonsynchr_pcatsne_300_2.npy
-│   │   ├── nonsynchr_pcatsne_300_3.npy
-│   │   ├── nonsynchr_pcatsne_80_2.npy
-│   │   └── nonsynchr_pcatsne_80_3.npy
-│   ├── gold_forms_2d.pkl
-│   ├── gold_labels_2d.pkl
-│   ├── index2case.json
-│   ├── list_of_noun_forms_full.csv
-│   ├── matrix_of_syncr.csv
-│   ├── nonsynchr_casevectors.npy
-│   ├── result.csv
-├── figures
-│   └── PCA_variance.png
-.
-```
-
 ### License
 
-All source code is made available under a BSD 3-clause license. You can freely
-use and modify the code, without warranty, so long as you provide attribution
-to the authors. See `LICENSE.md` for the full license text.
-
-The paper text is not open source. The author reserves the rights to the
-paper content.
+All source code is made available under a BSD 3-clause license. You can freely use and modify the code, without warranty, so long as you provide attribution to the authors. See `LICENSE.md` for the full license text.
+The project report and slide presentation content is not open source. The author reserves the rights to the content.
 
 #### Author: **Anna Stein**
 
