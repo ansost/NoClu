@@ -17,51 +17,13 @@ This script saved the lower dimensions vectors as .npy files in the folder '/dat
 combination as filename.
 """
 from typing import Tuple
+
 import yaml
 import numpy as np
 from tqdm import tqdm
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 
-
-def run_pca(vectors: np.array, components: int) -> np.array:
-    """Run dimensionality reduction using Principal Component Analysis.
-
-    Parameters
-    ----------
-    vectors:
-        Vectors to reduce.
-    components:
-        Number of dimensions to reduce to.
-
-    Returns
-    -------
-    results:
-        Reduced vectors.
-    """
-    pca = PCA(n_components=components)
-    results = pca.fit_transform(vectors)
-    return results
-
-
-def run_tsne(vectors: np.array, dims: int) -> np.array:
-    """Run dimensionality reduction using Principal Component Analysis and t-SNE in that order.
-
-    Parameters
-    ----------
-    vectors:
-        Vectors to reduce.
-    dims:
-        Number of dimensions to reduce to using t-SNE.
-
-    Returns
-    -------
-    tsne_result:
-        Reduced vectors.
-    """
-    tsne = TSNE(n_components=dims, init="pca", random_state=0)
-    result = tsne.fit_transform(vectors)
-    return result
+from src.constants import *
+from src.pca_tsne import run_pca, run_tsne
 
 
 def get_params(combination: str) -> Tuple[str, str, str]:
@@ -88,24 +50,21 @@ def valid_algorithm(algo: str) -> bool:
 
 if __name__ == "__main__":
     print("Loading config file...")
-    with open("../data/config_files/pca_tsne.config", "r") as f:
+    with open(PCATSNECONFIG, "r") as f:
         config = yaml.safe_load(f)
         conditions = config["conditions"]
         input = config["input"]
 
-    assert input[-3:] == "npy", "Input file must be .npy file."
-    word_embeddings = np.load(input)
+    if not input.endswith("npy"):
+        raise Exception("Input file must be .npy file.")
+    wordEmbeddings = np.load(input)
 
-    print("Reducing data for combination...")
     for combination in tqdm(conditions):
         algo, components, dims = get_params(combination)
-        print(combination)
         if valid_algorithm(algo):
-            results = run_pca(vectors=word_embeddings, components=components)
+            results = run_pca(vectors=wordEmbeddings, components=components)
 
             if algo == "pcatsne":
                 if dims:
                     results = run_tsne(vectors=results, dims=dims)
-            np.save(
-                "../data/dim_reduced_input/nonsynchr_" + combination + ".npy", results
-            )
+            np.save(DIMREDOUT + combination + ".npy", results)

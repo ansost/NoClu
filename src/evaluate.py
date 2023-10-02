@@ -2,24 +2,22 @@
 Evaluate clustering algorithms using a maximum flow minimum cost algorithm.
 
 Exports the functions:
-    - evaluate_clustering(): evaluate clustering algorithms using a range of common metrics.
-    - translate_labels(): translate predicted labels back to original labels.
-    - overlap(): compute overlap between a predicted cluster and a label form the gold labels.
-    - mincostflow(): compute a min cost flow between the predicted and the true labels.
+    - evaluate_clustering: evaluate clustering algorithms using a range of common metrics.
+    - translate_labels: translate predicted labels back to original labels.
+    - overlap: compute overlap between a predicted cluster and a label form the gold labels.
+    - mincostflow: compute a min cost flow between the predicted and the true labels.
 """
-from time import time
-from sklearn import metrics
-from numpy.typing import ArrayLike
-from typing import List, Dict
-import string
-import json
 from collections import Counter, defaultdict
+
 import networkx as nx
-from networkx.algorithms import bipartite
+from typing import List, Dict
+from numpy.typing import ArrayLike
+
+from src.constants import *
 
 
 def translate_labels(
-    labels: ArrayLike, gold_labels: ArrayLike, from_dbscan: bool = None
+    labels: ArrayLike, goldLabels: ArrayLike, dbscanLabels: bool = None
 ) -> Dict[str, List[int]]:
     """Translate predicted labels back to original labels.
     For each input word, add it to a dictionary with clusters as keys and the original labels as values.
@@ -28,8 +26,10 @@ def translate_labels(
     -----------
     labels:
         The labels estimated by the clustering algorithm.
-    gold_labels:
+    goldLabels:
         The true labels of the data.
+    dbscanLabels:
+        Whether the clustering algorithm is dbscan or not. If dbscan, the labels wiht -1 are filtered out since they denote noise.
 
     Returns:
     --------
@@ -38,15 +38,15 @@ def translate_labels(
     """
     clusters = defaultdict(list)
 
-    if from_dbscan:
+    if dbscanLabels:
         for index, label in enumerate(labels):
             if label != -1:
-                actual_label = gold_labels[index]
-                clusters["C" + str(label)].append(actual_label)
+                actualLabel = goldLabels[index]
+                clusters["C" + str(label)].append(actualLabel)
     else:
         for index, label in enumerate(labels):
-            actual_label = gold_labels[index]
-            clusters["C" + str(label)].append(actual_label)
+            actualLabel = goldLabels[index]
+            clusters["C" + str(label)].append(actualLabel)
     return clusters
 
 
@@ -73,7 +73,7 @@ def overlap(cluster: List[int], label: int) -> int:
         return -c[label]
 
 
-def mincostflow(predicted_labels: ArrayLike) -> Dict:
+def mincostflow(predictedLabels: ArrayLike) -> (int, Dict[str, Dict[str, int]]):
     """Compute a minimum cost maximum flow between the predicted and the true labels.
     Creates a directed graph (Digraph) with edges between predicted and true labels.
     The cost of each edge is the negative overlap between the predicted and the true label.
@@ -86,7 +86,7 @@ def mincostflow(predicted_labels: ArrayLike) -> Dict:
 
     Parameters:
     -----------
-    predicted_labels:
+    predictedLabels:
         The labels estimated by the clustering algorithm and translated to the original labels.
 
     Returns:
@@ -96,33 +96,31 @@ def mincostflow(predicted_labels: ArrayLike) -> Dict:
     flowDict:
         Dictionary of dictionaries keyed by nodes such that flowDict[u][v] is the flow edge (u, v).
     """
-
-    predictionclusters_as_nodes = [
-        "C" + str(i) for i in range(len(predicted_labels.keys()))
-    ]
+    predictionLabelKeys = list(predictedLabels.keys())
+    predictionClustersAsNodes = ["C" + str(i) for i in range(len(predictionLabelKeys))]
 
     B = nx.DiGraph()
     B.add_nodes_from(list(range(0, 14)), bipartite=0)
-    B.add_nodes_from(predictionclusters_as_nodes, bipartite=1)
+    B.add_nodes_from(predictionClustersAsNodes, bipartite=1)
 
     # Compute overlap between each of the gold clusters.
-    for index, cluster in enumerate(predicted_labels.keys()):
+    for index, cluster in enumerate(predictionLabelKeys):
         for label in range(0, 14):
-            cost = overlap(predicted_labels[cluster], label)
-            if cost:
+            cost = overlap(predictedLabels[cluster], label)
+            if cost:  # If overlap is not zero, aka cost is not zero add edge.
                 B.add_edge(
-                    label, predictionclusters_as_nodes[index], weight=cost, capacity=1
+                    label, predictionClustersAsNodes[index], weight=cost, capacity=1
                 )
 
-    B.add_node("super_source")
+    B.add_node("superSource")
     for node in range(0, 14):
         B.add_edge("super_source", node)
 
-    B.add_node("super_sink")
-    for node in predictionclusters_as_nodes:
+    B.add_node("superSink")
+    for node in predictionClustersAsNodes:
         B.add_edge(node, "super_sink", capacity=1)
 
     # Compute min cost flow.
-    flowDict = nx.max_flow_min_cost(B, s="super_source", t="super_sink")
+    flowDict = nx.max_flow_min_cost(B, s="superSource", t="superSink")
     cost = nx.cost_of_flow(B, flowDict)
     return cost, flowDict

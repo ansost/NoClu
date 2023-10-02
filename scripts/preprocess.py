@@ -16,12 +16,12 @@ Example: человек,2723.0,masc,anim,человек,человека,чел�
 The first four colums are filtered out to leave only the columns with the cases (variable: 'list_forms').
 The variable 'list_forms' has a shape of (11515, 14).
 
-'../data/matrix_of_syncr.csv'
+'matrix_of_syncr.csv'
 is a matrix with binary coding that describes which forms are syncretic out of the 14 forms for each noun.
 Each form corresponds to a power of 2 from 2^0 to 2^13. When a form is synchretic, they share the same power of 2.
 
 The script filters out the forms in 'list_forms' that are synchretic using 'matrix_of_syncr'.
-As a by-product, the gold labels are saved as numbers ('gold_labels') and the gold forms are saved as strings ('gold_forms').
+As a by-product, the gold labels are saved as numbers ('goldLabels') and the gold forms are saved as strings ('goldForms').
 This is done using two dicitonaries that map the cases to numbers and vice versa: 'case2label' and 'index2case'.
 The two gold lists are saved as:
 'gold_labels_2d.pkl' and 'gold_labels_1d.npy' & 'gold_forms_2d.pkl' and 'gold_forms_1d.npy'.
@@ -30,72 +30,68 @@ The code for this project only uses the 1 dimensional list, but the 2 dimensiona
 The use of two different files is due to the fact that numpy can not save 'jagged arrays' (i.e. arrays with different lengths)
 see this link for more info: https://stackoverflow.com/questions/65165451/how-to-make-2d-jagged-array-using-numpy.
 
-'../data/final-model.bin'.
+'data/final-model.bin'.
 is a pre-trained fasttext model that contains the vectors for all the forms in 'list_of_noun_forms_full.csv'.
-It is used to extract the vectors of the forms in 'gold_forms' from the fasttext model, in other words the vectors of the non-syncretic forms.
+It is used to extract the vectors of the forms in 'goldForms' from the fasttext model, in other words the vectors of the non-syncretic forms.
 The vectors are saved as 'nonsynchr_casevectors.npy'.
 """
-import numpy as np
-import fasttext as ft
-import pickle
-import time
 import json
 
-start_time = time.time()
+import pickle
+import numpy as np
+import fasttext as ft
 
-# Load data.
-list_of_all_forms = np.loadtxt(
-    "../data/list_of_noun_forms_full.csv", dtype=object, delimiter=","
-)
-list_forms = list_of_all_forms[:, 4:]
-matrix_of_syncr = np.loadtxt(
-    "../data/matrix_of_syncr.csv", dtype=float, delimiter=","
-).astype(int)
+from src.constants import *
 
-with open("../data/case2label.json", "r") as f:
-    case2label = json.load(f)
+if __name__ == "__main__":
+    # Load data.
+    listOfAllForms = np.loadtxt(LISTOFALLFORMS, dtype=object, delimiter=",")
+    listForms = listOfAllForms[:, 4:]
+    matrixOfSyncr = np.loadtxt(BINARYMATRIX, dtype=float, delimiter=",").astype(int)
 
-with open("../data/index2case.json", "r") as f:
-    index2case = json.load(f)
+    with open(CASE2LABEL, "r") as f:
+        case2label = json.load(f)
 
-# Make gold labels.
-gold_labels = []
-gold_forms = []
+    with open(INDEX2CASE, "r") as f:
+        index2case = json.load(f)
 
-for form_idx in range(0, len(list_forms)):
-    case_labels = []
-    case_forms = []
+    # Make gold labels.
+    goldLabels = []
+    goldForms = []
 
-    for case_idx in range(0, 14):
-        # Get label  and form if they are not synchretic.
-        if matrix_of_syncr[form_idx][case_idx] == 2**case_idx:
-            form = list_forms[form_idx][case_idx]
+    for formIdx in range(0, len(listForms)):
+        caseLabels = []
+        caseForms = []
 
-            case = index2case[case_idx]
-            label = case2label[case]
+        for caseIdx in range(0, 14):
+            # Get label  and form if they are not synchretic.
+            if matrixOfSyncr[formIdx][caseIdx] == 2**caseIdx:
+                form = listForms[formIdx][caseIdx]
 
-            case_labels.append(label)
-            case_forms.append(form)
+                case = index2case[caseIdx]
+                label = case2label[case]
 
-    gold_labels.append(case_labels)
-    gold_forms.append(case_forms)
+                caseLabels.append(label)
+                caseForms.append(form)
 
-with open("../data/gold_labels_2d.pkl", "wb") as f:
-    pickle.dump(gold_labels, f)
-with open("../data/gold_forms_2d.pkl", "wb") as f:
-    pickle.dump(gold_forms, f)
+        goldLabels.append(caseLabels)
+        goldForms.append(caseForms)
 
-flat_labels = [item for sublist in gold_labels for item in sublist]
-flat_forms = [item for sublist in gold_forms for item in sublist]
-np.save("../data/gold_labels_1d.npy", flat_labels)
-np.save("../data/gold_forms_1d.npy", flat_forms)
+    with open(GOLDLABELS2D, "wb") as f:
+        pickle.dump(goldLabels, f)
+    with open(GOLDFORMS2D, "wb") as f:
+        pickle.dump(goldForms, f)
 
-# Retrieve vectors for gold forms.
-model = ft.load_model("../data/final-model.bin")
-vectors = []
-for sublist in flat_forms:
-    for label in sublist:
-        vector = model.get_word_vector(label)
-        vectors.append(vector)
-np.save("../data/nonsynchr_casevectors.npy", vectors)
-print(f"Preprocessing done! \nCompleted in {time.time() - start_time}.")
+    flatLabels = [item for sublist in goldLabels for item in sublist]
+    flatForms = [item for sublist in goldForms for item in sublist]
+    np.save(GOLDLABELS1D, flatLabels)
+    np.save(FOLDFORMS1D, flatForms)
+
+    # Retrieve vectors for gold forms.
+    model = ft.load_model(FASTTEXTMODEL)
+    vectors = []
+    for sublist in flatForms:
+        for label in sublist:
+            vector = model.get_word_vector(label)
+            vectors.append(vector)
+    np.save(VECTORSOUT, vectors)

@@ -6,11 +6,10 @@ Exports the functions:
     dbscan - DBSCAN clustering
 """
 from numpy.typing import ArrayLike
-from typing import List
-from sklearn.cluster import KMeans, DBSCAN, AgglomerativeClustering
+from sklearn.cluster import KMeans, DBSCAN
 
 
-def kmeans(vectors: ArrayLike, n_clusters: int) -> List[ArrayLike]:
+def kmeans(vectors: ArrayLike, n_clusters: int) -> ArrayLike:
     """Cluster vectors using k-means.
 
     Parameters
@@ -30,7 +29,7 @@ def kmeans(vectors: ArrayLike, n_clusters: int) -> List[ArrayLike]:
     return labels
 
 
-def dbscan(vectors: ArrayLike, epsilon: float) -> List[ArrayLike]:
+def dbscan(vectors: ArrayLike, epsilon: float) -> ArrayLike:
     """Cluster vectors using DBSCAN.
 
     Parameters
