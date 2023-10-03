@@ -10,14 +10,14 @@ Exports the functions:
 from collections import Counter, defaultdict
 
 import networkx as nx
-from typing import List, Dict
+from typing import List, Dict, Union
 from numpy.typing import ArrayLike
 
 from src.constants import *
 
 
 def translate_labels(
-    labels: ArrayLike, goldLabels: ArrayLike, dbscanLabels: bool = None
+    labels: ArrayLike, goldLabels: ArrayLike, dbscanLabels: Union[bool, None] = None
 ) -> Dict[str, List[int]]:
     """Translate predicted labels back to original labels.
     For each input word, add it to a dictionary with clusters as keys and the original labels as values.
@@ -114,11 +114,11 @@ def mincostflow(predictedLabels: ArrayLike) -> (int, Dict[str, Dict[str, int]]):
 
     B.add_node("superSource")
     for node in range(0, 14):
-        B.add_edge("super_source", node)
+        B.add_edge("superSource", node)
 
     B.add_node("superSink")
     for node in predictionClustersAsNodes:
-        B.add_edge(node, "super_sink", capacity=1)
+        B.add_edge(node, "superSink", capacity=1)
 
     # Compute min cost flow.
     flowDict = nx.max_flow_min_cost(B, s="superSource", t="superSink")
