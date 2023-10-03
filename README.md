@@ -55,6 +55,8 @@ Two optional scripts for producing plots are run in [Jupyter notebooks](https://
 The primary data source is a pre-trained fastText model with word embeddings for Russian noun cases.
 More information on the data used can be found in the preprocessing script (`scripts/preprocess.py`).
 
+Since the model is very large and currently stored in git large file storage, please contact the author if you would like to use it. 
+
 #### Preprocessing
 
 Filter syncretic forms from the word embeddings and extract the vectors for the nonsynchretic forms. Also, gather the gold labels.
