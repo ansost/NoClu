@@ -133,7 +133,9 @@ if __name__ == "__main__":
             cost, flowDict = mincostflow(predictedLabels=translatedLabels)
 
             # Write to json.
-            with open(f"{FLOWDICTOUT}{combination}.json", "w") as f:
+            with open(
+                f"{FLOWDICTOUT}{combination}{input.split('/')[-1]}.json", "w"
+            ) as f:
                 json.dump(flowDict, f)
 
             # Save results in logs.
