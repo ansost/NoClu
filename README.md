@@ -13,6 +13,7 @@ by [**Anna Stein**](https://ansost.github.io)
 ├── src
 ├── scripts
 ├── data
+├── notebooks
 ├── figures
 .
 ```
