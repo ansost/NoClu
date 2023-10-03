@@ -94,7 +94,7 @@ if __name__ == "__main__":
     # Retrieve vectors for gold forms.
     model = ft.load_model(FASTTEXTMODEL)
     vectors = []
-    for sublist in flatForms:
+    for sublist in goldForms:
         for label in sublist:
             vector = model.get_word_vector(label)
             vectors.append(vector)
