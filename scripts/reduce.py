@@ -16,7 +16,7 @@ For more information on the input see the configuration file ('data/config_files
 This script saved the lower dimensions vectors as .npy files in the folder '/data/dim_reduced_input' with the
 combination as filename.
 """
-from typing import Tuple
+from typing import Tuple, Union
 
 import yaml
 import numpy as np
@@ -26,7 +26,7 @@ from src.constants import *
 from src.pca_tsne import run_pca, run_tsne
 
 
-def get_params(combination: str) -> Tuple[str, str, str]:
+def get_params(combination: str) -> Tuple[str, int, Union[str, None]]:
     """Get parameter combinations from str filename.
     See Module docstring for more information on parameter combinations."""
     params = combination.split("_")
@@ -66,5 +66,5 @@ if __name__ == "__main__":
 
             if algo == "pcatsne":
                 if dims:
-                    results = run_tsne(vectors=results, dims=dims)
+                    results = run_tsne(vectors=results, dims=int(dims))
             np.save(DIMREDOUT + combination + ".npy", results)
