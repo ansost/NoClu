@@ -36,6 +36,9 @@ It is used to extract the vectors of the forms in 'goldForms' from the fasttext 
 The vectors are saved as 'nonsynchr_casevectors.npy'.
 """
 import json
+import sys
+
+sys.path.append("..")  # FIXME: this is a hack
 
 import pickle
 import numpy as np
@@ -54,6 +57,7 @@ if __name__ == "__main__":
 
     with open(INDEX2CASE, "r") as f:
         index2case = json.load(f)
+    index2case = {int(k): v for k, v in index2case.items()}  # Convert keys to integers.
 
     # Make gold labels.
     goldLabels = []
