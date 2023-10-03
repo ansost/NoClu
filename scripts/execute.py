@@ -7,7 +7,7 @@ Usage:
 Input for the script is a config file, which contains the following parameters:
     - input: path to input file (word embeddings)
     - combinations: list of combinations of clustering algorithms and number of clusters
-    - saveto: path to save output files
+    - saveTo: path to save output files
 
 More information on the parameters can be found in the config file ('/data/config_files/noclu.config').
 
@@ -56,7 +56,7 @@ def new_row(
     input: ArrayLike,
     cost: int,
     algorithm: str,
-    nClusters: int,
+    nClusters: Union[int, float],
     goldLabelPath: str,
     saveTo: str,
 ) -> Dict[str, str]:
@@ -87,8 +87,8 @@ def new_row(
         "cost": cost,
         "algorithm": algorithm,
         "nClusters": nClusters,
-        "goldLabels": goldLabelPath.split("/")[-1],
-        "output": saveTo.split("/")[-1],
+        "goldLabelPath": goldLabelPath,
+        "saveTo": saveTo,
         "date": pd.to_datetime("today").strftime("%Y-%m-%d-%H-%M-%S"),
     }
     return newRow
@@ -137,9 +137,10 @@ if __name__ == "__main__":
                 json.dump(flowDict, f)
 
             # Save results in logs.
+            goldLabelPath = GOLDLABELS1D.split("/")[-1]
             inputFile = input.split("/")[-1]
             addRow = new_row(
-                inputFile, cost, algorithm, nClusters, GOLDLABELS1D, saveTo
+                inputFile, cost, algorithm, nClusters, goldLabelPath, saveTo
             )
             df.loc[len(df.index)] = addRow
 
