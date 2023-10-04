@@ -2,6 +2,18 @@
 
 by [**Anna Stein**](https://ansost.github.io)
 
+**Project description:** 
+
+Dimensionality reduction techniques are commonly used to reduce the dimensions of data before
+clustering. High dimensional data usually leads to worse clustering results. However, in the process
+of reducing the data, some data may get lost which can lead to poor performance of the clustering
+algorithms. This project aims to investigate the effect of Principal Component Analysis and t-distributed
+stochastic neighbor embedding on performance of clustering algorithms k-means and DBSCAN. Results
+show that DBSCAN may be more susceptible to different numbers of dimensions of the input data when
+its produced by t-SNE. No such effect us found for k-means. Overall, the number of PCA components
+(of 95% and 99% variance) do not affect the performance of the clustering algorithms as strongly as the
+dimension reduction by t-SNEdoes. Further, more detailed research is needed to confirm these findings.
+
 <details>
 <summary>See repository structure</summary>
 
