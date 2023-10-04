@@ -116,10 +116,6 @@ The two notebooks in the `notebooks/` folder can be used to plot elbow plots to 
 All source code is made available under a BSD 3-clause license. You can freely use and modify the code without warranty if you provide attribution to the authors. See `LICENSE.md` for the full license text.
 The project report and slide presentation content are not open source. The author reserves the rights to the content.
 
-#### Author: **Anna Stein**
-
-#### Adviser: Yulia Zinova
-
-Website: [https://ansost.github.io](https://ansost.github.io)
+--- 
 
 If you are having problems with anything regarding this repository, please write me email: [anna.stein@hhu.de](mailto:anna.stein@hhu.de)
