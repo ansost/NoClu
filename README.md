@@ -56,7 +56,7 @@ pip install -r requirements.txt
 
 ## Software implementation
 
-All source code used to generate the results and figures in this paper are in the `src/` and `scripts` folder.
+All source code used to generate the results and figures in this paper are in the `src/` and `scripts/` folder.
 The calculations and figure generation are run in [Python](https://www.python.org/) scripts with [Python 3.8.10](https://www.python.org/downloads/release/python-3810/).
 
 This repository uses pre-commit hooks. Learn more about them and how to install/use them here: [https://pre-commit.com/](https://pre-commit.com/).
@@ -83,7 +83,7 @@ python3 preprocess.py
 > Note that you must navigate to the `scripts/` folder to run this script and the ones in the following sections.
 
 Use just PCA or PCA followed by t-SNE to reduce the dimensions of the vectors. See the docstring of the script and the top of the config file (`data/config_files/npclu.py`) for more information on the input parameters.
-> Note that all computations involving t-SNE may take time to run (1h+).
+> Note that all computations involving t-SNE may take a long time to run (1h+).
 
 ```sh
 python3 reduce.py
@@ -101,7 +101,7 @@ Results are saved in `data/clustering_output/` and `data/result.csv`. An overvie
 
 #### Plotting
 
-The thesescripts are **optional** scripts and notebooks that can be used to reproduce the plots in the report. They are optional to run the clustering and evaluation.
+These are **optional** scripts and notebooks that can be used to reproduce the plots in the report. They are not needed to run the clustering and evaluation.
 
 Run the following script to plot the results of the clustering and evaluation as a bar and line plot. The absolute value of the cost is displayed on the y-axis, while the number of clusters (for k-means) or the epsilon value (for DBSCAN) is displayed on the x-axis. The script output is saved in the 'figures/' folder.
 
