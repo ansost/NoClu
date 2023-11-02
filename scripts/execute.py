@@ -28,6 +28,7 @@ from numpy.typing import ArrayLike
 
 from src.evaluate import mincostflow, translate_labels
 from src.clustering import kmeans, dbscan
+from src.plot_clusters import plot_DBSCAN
 from src.constants import *
 
 
@@ -98,16 +99,18 @@ if __name__ == "__main__":
     startTime = time.time()
     ALGODICT = {"kmeans": kmeans, "dbscan": dbscan}
 
-    # Load gold labels from npy.
+    # Get arguments from config file.
     with open(NOCLUCONFIG, "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     input = config["input"]
     combinations = config["combinations"]
     saveTo = config["saveTo"]
+    plotClusters = config["plotClusters"]
 
     if not input.endswith("npy"):
         raise Exception("Input file must be .npy file.")
 
+    # Load data.
     wordEmbeddings = np.load(input)
     goldLabels = np.load(GOLDLABELS1D)
 
@@ -124,7 +127,7 @@ if __name__ == "__main__":
                 dbscanLabels = False
 
             # Cluster.
-            labels = ALGODICT[algorithm](wordEmbeddings, nClusters)
+            dbscan_object, labels = ALGODICT[algorithm](wordEmbeddings, nClusters)
             filename = f"{saveTo}{combination}{input.split('/')[-1]}"
             np.save(filename, labels)
 
@@ -133,10 +136,10 @@ if __name__ == "__main__":
             cost, flowDict = mincostflow(predictedLabels=translatedLabels)
 
             # Write to json.
-            with open(
-                f"{FLOWDICTOUT}{combination}{input.split('/')[-1]}.json", "w"
-            ) as f:
-                json.dump(flowDict, f)
+            # with open(
+            #     f"{FLOWDICTOUT}{combination}{input.split('/')[-1]}.json", "w"
+            # ) as f:
+            #     json.dump(flowDict, f)
 
             # Save results in logs.
             goldLabelPath = GOLDLABELS1D.split("/")[-1]
@@ -145,6 +148,15 @@ if __name__ == "__main__":
                 inputFile, cost, algorithm, nClusters, goldLabelPath, saveTo
             )
             df.loc[len(df.index)] = addRow
+
+            if plotClusters and algorithm == "dbscan":
+                coreSampleIndices_ = dbscan_object.core_sample_indices_
+                plot_DBSCAN(
+                    labels=labels,
+                    input_=wordEmbeddings,
+                    coreSampleIndices_=coreSampleIndices_,
+                    filename=f"{algorithm}{nClusters}{inputFile}",
+                )
 
     df.to_csv(RESULTCSV, index=False)
     print(df[["algorithm", "nClusters", "cost", "input"]].tail(10))

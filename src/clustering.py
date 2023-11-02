@@ -5,11 +5,16 @@ Exports the functions:
     kmeans - k-means clustering
     dbscan - DBSCAN clustering
 """
+from typing import Tuple
+
 from numpy.typing import ArrayLike
+import sklearn
 from sklearn.cluster import KMeans, DBSCAN
 
 
-def kmeans(vectors: ArrayLike, n_clusters: int) -> ArrayLike:
+def kmeans(
+    vectors: ArrayLike, n_clusters: int
+) -> Tuple[sklearn.cluster._kmeans.KMeans, ArrayLike]:
     """Cluster vectors using k-means.
 
     Parameters
@@ -21,15 +26,19 @@ def kmeans(vectors: ArrayLike, n_clusters: int) -> ArrayLike:
 
     Returns
     -------
+    kmeans:
+        Fitted k-means model.
     labels:
         Cluster labels of each point.
     """
     kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init="auto").fit(vectors)
     labels = kmeans.labels_
-    return labels
+    return kmeans, labels
 
 
-def dbscan(vectors: ArrayLike, epsilon: float) -> ArrayLike:
+def dbscan(
+    vectors: ArrayLike, epsilon: float
+) -> Tuple[sklearn.cluster._dbscan.DBSCAN, ArrayLike]:
     """Cluster vectors using DBSCAN.
 
     Parameters
@@ -46,4 +55,4 @@ def dbscan(vectors: ArrayLike, epsilon: float) -> ArrayLike:
     """
     db = DBSCAN(eps=epsilon).fit(vectors)
     labels = db.labels_
-    return labels
+    return db, labels
