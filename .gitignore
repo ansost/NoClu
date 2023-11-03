@@ -1,6 +1,9 @@
 # virtual environment
 nocluV/
 
+# tests
+tests/
+
 # vscode files
 .vscode/
 
