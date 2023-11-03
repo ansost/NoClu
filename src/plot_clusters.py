@@ -60,3 +60,26 @@ def plot_DBSCAN(labels, input_, coreSampleIndices_, filename):
     plt.title(f"Estimated number of clusters: {nClusters_}")
     plt.show()
     plt.savefig(f"../figures/clusters/{filename}.png")
+
+
+def plot_kmeans(labels, input_, clusterCenters, nClusters, filename):
+    """Plot clusters from kMeans.
+
+    Parameters
+    ----------
+    labels:
+        Cluster labels of each point.
+    input_:
+        Vectors to cluster.
+    clusterCenters:
+        Coordinates of cluster centers.
+    nClusters:
+        Number of clusters.
+    filename:
+        Name of saved plot.
+    """
+    plt.scatter(input_[:, 0], input_[:, 1], s=10, c=labels)
+    plt.scatter(clusterCenters[:, 0], clusterCenters[:, 1], c="r", s=20)
+    plt.title(f"KMeans with {nClusters} clusters")
+    plt.show()
+    plt.savefig(f"../figures/clusters/{filename}.png")
