@@ -28,7 +28,7 @@ from numpy.typing import ArrayLike
 
 from src.evaluate import mincostflow, translate_labels
 from src.clustering import kmeans, dbscan
-from src.plot_clusters import plot_DBSCAN
+from src.plot_clusters import plot_DBSCAN, plot_kmeans
 from src.constants import *
 
 
@@ -127,7 +127,7 @@ if __name__ == "__main__":
                 dbscanLabels = False
 
             # Cluster.
-            dbscan_object, labels = ALGODICT[algorithm](wordEmbeddings, nClusters)
+            cluster_object, labels = ALGODICT[algorithm](wordEmbeddings, nClusters)
             filename = f"{saveTo}{combination}{input.split('/')[-1]}"
             np.save(filename, labels)
 
@@ -135,11 +135,11 @@ if __name__ == "__main__":
             translatedLabels = translate_labels(labels, goldLabels, dbscanLabels)
             cost, flowDict = mincostflow(predictedLabels=translatedLabels)
 
-            # Write to json.
-            # with open(
-            #     f"{FLOWDICTOUT}{combination}{input.split('/')[-1]}.json", "w"
-            # ) as f:
-            #     json.dump(flowDict, f)
+            #  Write to json.
+            with open(
+                f"{FLOWDICTOUT}{combination}{input.split('/')[-1]}.json", "w"
+            ) as f:
+                json.dump(flowDict, f)
 
             # Save results in logs.
             goldLabelPath = GOLDLABELS1D.split("/")[-1]
@@ -150,11 +150,23 @@ if __name__ == "__main__":
             df.loc[len(df.index)] = addRow
 
             if plotClusters and algorithm == "dbscan":
-                coreSampleIndices_ = dbscan_object.core_sample_indices_
+                coreSampleIndices_ = cluster_object.core_sample_indices_
+                dbscanLabels = cluster_object.labels_
                 plot_DBSCAN(
-                    labels=labels,
+                    labels=dbscanLabels,
                     input_=wordEmbeddings,
                     coreSampleIndices_=coreSampleIndices_,
+                    filename=f"{algorithm}{nClusters}{inputFile}",
+                )
+
+            if plotClusters and algorithm == "kmeans":
+                clusterCenters = cluster_object.cluster_centers_
+                kmeansLabels = cluster_object.labels_
+                plot_kmeans(
+                    labels=kmeansLabels,
+                    input_=wordEmbeddings,
+                    clusterCenters=clusterCenters,
+                    nClusters=nClusters,
                     filename=f"{algorithm}{nClusters}{inputFile}",
                 )
 
