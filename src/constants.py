@@ -4,8 +4,8 @@ Constants used in the project.
 
 LISTOFALLFORMS = "../data/list_of_noun_forms_full.csv"
 BINARYMATRIX = "../data/matrix_of_syncr.csv"
-CASE2LABEL = "../data/case2label.json"
-INDEX2CASE = "../data/index2case.json"
+CASE2LABEL = "../data/lookup_dicts/case2label.json"
+INDEX2CASE = "../data/lookup_dicts/index2case.json"
 GOLDLABELS2D = "../data/gold_data/gold_labels_2d.pkl"
 GOLDFORMS2D = "../data/gold_data/gold_forms_2d.pkl"
 GOLDLABELS1D = "../data/gold_data/gold_labels_1d.npy"
