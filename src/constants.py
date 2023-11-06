@@ -2,8 +2,8 @@
 Constants used in the project.
 """
 
-LISTOFALLFORMS = "../data/list_of_noun_forms_full.csv"
-BINARYMATRIX = "../data/matrix_of_syncr.csv"
+LISTOFALLFORMS = "../data/vectors_metadata/list_of_noun_forms_full.csv"
+BINARYMATRIX = "../data/vectors_metadata/matrix_of_syncr.csv"
 CASE2LABEL = "../data/lookup_dicts/case2label.json"
 INDEX2CASE = "../data/lookup_dicts/index2case.json"
 GOLDLABELS2D = "../data/gold_data/gold_labels_2d.pkl"
