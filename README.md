@@ -2,7 +2,7 @@
 
 by [**Anna Stein**](https://ansost.github.io)
 
-**Project description:** 
+**Project description:**
 
 Dimensionality reduction techniques are commonly used to reduce the dimensions of data before
 clustering. High dimensional data usually leads to worse clustering results. However, in the process
@@ -68,7 +68,7 @@ Two optional scripts for producing plots are run in [Jupyter notebooks](https://
 The primary data source is a pre-trained fastText model with word embeddings for Russian noun cases.
 More information on the data used can be found in the preprocessing script (`scripts/preprocess.py`).
 
-Since the model is very large and currently stored in git large file storage, please contact the author if you would like to use it. 
+Since the model is very large and currently stored in git large file storage, please contact the author if you would like to use it.
 
 #### Preprocessing
 
@@ -116,6 +116,6 @@ The two notebooks in the `notebooks/` folder can be used to plot elbow plots to 
 All source code is made available under a BSD 3-clause license. You can freely use and modify the code without warranty if you provide attribution to the authors. See `LICENSE.md` for the full license text.
 The project report and slide presentation content are not open source. The author reserves the rights to the content.
 
---- 
+---
 
 If you are having problems with anything regarding this repository, please write me email: [anna.stein@hhu.de](mailto:anna.stein@hhu.de)
