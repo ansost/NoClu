@@ -1,3 +1,9 @@
+# clustering output .npy files
+data/clustering_output/
+
+# figures
+figures/
+
 # notebooks
 notebooks/
 
